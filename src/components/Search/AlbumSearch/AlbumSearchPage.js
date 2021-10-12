@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import SearchAlbumElement from './SearchAlbumElement';
-
+import Loading from '../../Loading';
 function AlbumSearchPage() {
 
     const [albums, setAlbums] = useState([]);
     const { query } = useParams();
+    const [isLoading, setIsLoading] = useState(true)
 
     const spotifyApi = useSelector(state => state.token)
 
@@ -14,12 +15,15 @@ function AlbumSearchPage() {
         if (spotifyApi !== '') {
             spotifyApi.searchAlbums(query)
                 .then(data => {
-                    console.log(data.albums.items)
+                    setIsLoading(false)
                     setAlbums(data.albums.items)
                 })
         }
     }, [spotifyApi])
 
+    if (isLoading) {
+        return <Loading />
+    }
     return (
         <div className="max-w-screen-3xl full-height m-auto py-8 px-4">
             <h1 className="text-4xl font-semibold ml-8">Albums: {query}</h1>

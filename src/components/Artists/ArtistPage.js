@@ -4,12 +4,14 @@ import TrackElement from "./TrackElement";
 import AlbumElement from "./AlbumElement";
 import { useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
+import Loading from "../Loading";
 
 function ArtistPage() {
 
   const [artist, setArtist] = useState();
   const [artistTracks, setArtistTracks] = useState([]);
   const [artistAlbums, setArtistAlbums] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
 
 
@@ -28,12 +30,15 @@ function ArtistPage() {
 
       spotifyApi.getArtistAlbums(id)
         .then(data => {
-          console.log(data.items)
+          setIsLoading(false)
           setArtistAlbums(data.items)
         })
     }
   }, [spotifyApi])
 
+  if (isLoading) {
+    return <Loading />
+  }
   return (
     <div className="max-w-screen-2xl full-height grid grid-cols-1 md:grid-cols-8 gap-8 m-auto py-8 px-2">
 

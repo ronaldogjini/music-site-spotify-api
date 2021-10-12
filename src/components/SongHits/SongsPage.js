@@ -2,22 +2,27 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import SongElement from './SongElement';
-
+import Loading from '../Loading'
 function SongsPage() {
 
   const [tracks, setTracks] = useState([]);
   const spotifyApi = useSelector(state => state.token)
-
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     if (spotifyApi !== '') {
       spotifyApi.getPlaylistTracks("37i9dQZEVXbMDoHDwVN2tF")
-        .then(data => setTracks(data.items))
+        .then(data => {
+          setTracks(data.items)
+          setIsLoading(false)
+        })
         .catch(err => console.log(err))
 
     }
   }, [spotifyApi])
 
-
+  if (isLoading) {
+    return <Loading />
+  }
   return (
     <div className="max-w-screen-3xl full-height m-auto py-8 px-4">
       <h1 className="text-4xl font-bold uppercase ml-8">Latest Hits</h1>
