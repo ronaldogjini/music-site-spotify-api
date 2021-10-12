@@ -14,6 +14,6 @@ export default function getToken() {
             grant_type: "client_credentials",
         }),
     })
-        .then((data) => data.json())
-        .then((data) => data.access_token)
+        .then((data) => data.json());
+
 }
